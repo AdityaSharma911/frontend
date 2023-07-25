@@ -2,6 +2,9 @@ import { useState } from 'react';
 import './App.css';
 
 function App() {
+
+  const [responseStatus, setResponseStatus] = useState(null)
+
   const [form, setForm] = useState ({
     fullName: '',
     email: '',
@@ -27,7 +30,6 @@ function App() {
 
   const showData = () => {
     console.log('Form', form);
-  
   }
 
   const onSubmit = (e) => {
@@ -98,10 +100,12 @@ function App() {
       })
       .then((data) => {
         console.log('Server response:', data);
+        setResponseStatus(true)
         // Do something with the server response if needed
       })
       .catch((error) => {
         console.error('Error sending data:', error);
+        setResponseStatus(false)
         // Handle errors if any occur during the fetch request
       });
   };
@@ -114,6 +118,17 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
+        {
+          (()=>{
+            if (responseStatus === null) {
+              return null
+            } else if (responseStatus === true){
+              return <h3>Details Saved</h3>
+            } else if (responseStatus === false) {
+              return <h3>Request Failed</h3>
+            }
+          })()
+        }
        <form onSubmit={onSubmit}>
        <h1>Employee Details Form</h1>
 
